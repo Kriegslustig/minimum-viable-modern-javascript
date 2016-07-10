@@ -15,11 +15,12 @@ var autoprefixer = require('autoprefixer')
 /* Check if we're in a development environment */
 var dev = process.env.NODE_ENV !== 'production'
 
+/* The CSS text extractor */
+var cssExtractor = new ExtractTextPlugin('[name].css')
+var htmlExtractor = new ExtractTextPlugin('[name].html')
+
 /* Later passed to `module.exports` */
-var plugins = [
-  /* Initialize the extract-text-plugin */
-  new ExtractTextPlugin('[name].css')
-]
+var plugins = [ cssExtractor, htmlExtractor ]
 /* In a production environment */
 if (!dev) {
   /* Add uglify all JS */
@@ -75,7 +76,7 @@ module.exports = {
 
       {
         /* The SCSS loader */
-        test: /\.scss/,
+        test: /\.scss$/,
         include: [ sourcePath ],
         /*
          * The loader itself is a bit more complex.
@@ -88,14 +89,7 @@ module.exports = {
          * in reverse order. So here, the `style-loader` will be called
          * last.
          */
-        loader: ExtractTextPlugin.extract(
-          /*
-           * Prepares the compiled CSS for webpack.
-           * It normally generates some JS to create a <style> tag
-           * and inject the CSS into it. It's written by the webpack
-           * core team.
-           */
-          'style',
+        loader: cssExtractor.extract([
           /*
            * The `css-loader` is another loader written by the webpack
            * core team. It has various features:
@@ -108,10 +102,9 @@ module.exports = {
            * *
            * * [And more](https://github.com/webpack/css-loader)
            */
-          (dev
+          dev
             ? 'css?-minimize&-url'
-            : 'css?minimize&-url'
-          ),
+            : 'css?minimize&-url',
           /*
            * Right after the SCSS has been compiled to CSS, its piped
            * through the `postcss-loader`. PostCSS defines a plugin
@@ -121,8 +114,19 @@ module.exports = {
            * The actual PostCSS plugins are set near the end of the
            * file with the `postcss` property.
            */
-          'postcss'
-        )
+          'postcss',
+          /*
+           * The Sass loader uses `node-sass` which in turn uses
+           * libsass
+           */
+          'sass'
+        ])
+      },
+      /* Pug compilation */
+      {
+        test: /\.pug$/,
+        include: [ sourcePath ],
+        loader: htmlExtractor.extract('pug-html')
       }
     ]
   },

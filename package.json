@@ -1,0 +1,41 @@
+{
+  "name": "minimum-viable-modern-javascript",
+  "version": "0.1.0",
+  "description": "An introduction to modern JS development",
+  "main": ".",
+  "scripts": {
+    "build": "NODE_ENV=production webpack",
+    "watch-build": "webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kriegslustig/minimum-viable-modern-javascript.git"
+  },
+  "author": "Luca Nils Schmid <npm@ls7.ch>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kriegslustig/minimum-viable-modern-javascript/issues"
+  },
+  "homepage": "https://github.com/Kriegslustig/minimum-viable-modern-javascript#readme",
+  "devDependencies": {
+    "bespoke": "^1.1.0",
+    "bespoke-keys": "^1.1.0",
+    "bespoke-theme-cube": "^2.0.1",
+    "bespoke-touch": "^1.0.0"
+  },
+  "dependencies": {
+    "autoprefixer": "^6.3.7",
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "css-loader": "^0.23.1",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "node-sass": "^3.8.0",
+    "postcss-loader": "^0.9.1",
+    "pug-html-loader": "^1.0.8",
+    "sass-loader": "^4.0.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.1"
+  }
+}
