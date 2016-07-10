@@ -1,0 +1,43 @@
+Problems
+	Dependency Injection
+	Versioning
+	ECMAScript 6.0
+	Minification
+
+Basic Toolchain
+	Node.js
+	NVM (Windows)
+	NPM
+	Webpack
+
+Tools - Node.js
+	Asynchronous I/O with [libuv](https://github.com/libuv/libuv)
+	4.4 LTS
+
+Tools - NVM-Windows
+	Node Version Manager Windows
+	n (for *nix)	
+	Incompatibilities in Adapters
+
+Tools - NPM
+	Node Package Manager
+	Dependency Management
+	Bower
+
+Tools - Webpack
+	Build Tool – Module Bundler
+	Powerful Configuration
+	Rich Ecosystem
+	[...]
+
+Creating an NPM package
+	`npm init`
+	A Proper package.json
+	`npm install --save [...]`
+		 Typosqatting!!
+
+Configuring Webpack
+	Development and Production Mode
+	Deduplication
+	Adding loaders
+	
