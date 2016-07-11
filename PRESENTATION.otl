@@ -16,7 +16,7 @@ Tools - Node.js
 
 Tools - NVM-Windows
 	Node Version Manager Windows
-	n (for *nix)	
+	n (for *nix)
 	Incompatibilities in Adapters
 
 Tools - NPM
@@ -40,4 +40,4 @@ Configuring Webpack
 	Development and Production Mode
 	Deduplication
 	Adding loaders
-	
+
