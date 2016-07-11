@@ -4,7 +4,7 @@
   "description": "An introduction to modern JS development",
   "main": ".",
   "scripts": {
-    "build": "NODE_ENV=production webpack",
+    "build": "NODE_ENV=production webpack -p",
     "watch-build": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,7 +20,10 @@
   "homepage": "https://github.com/Kriegslustig/minimum-viable-modern-javascript#readme",
   "dependencies": {
     "bespoke": "^1.1.0",
+    "bespoke-hash": "^1.0.2",
     "bespoke-keys": "^1.1.0",
+    "bespoke-notes": "file:///Users/kriegslustig/Software/nodejs/bespoke-notes",
+    "bespoke-progress": "^1.0.0",
     "bespoke-theme-cube": "^2.0.1",
     "bespoke-touch": "^1.0.0"
   },

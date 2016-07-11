@@ -11,7 +11,11 @@
  */
 import bespoke from 'bespoke'
 import bespokeKeys from 'bespoke-keys'
+import bespokeHash from 'bespoke-hash'
 import bespokeThemeCube from 'bespoke-theme-cube'
+import bespokeProgress from 'bespoke-progress'
+import bespokeNotes from 'bespoke-notes'
+import bespokeTouch from 'bespoke-touch'
 
 /*
  * After NPM dependencies come internal ones.
@@ -27,6 +31,10 @@ bespoke.from(
   '#presentation',
   [
     bespokeKeys(),
+    bespokeTouch(),
+    bespokeHash(),
+    bespokeProgress(),
+    bespokeNotes(),
     bespokeThemeCube()
   ]
 )
