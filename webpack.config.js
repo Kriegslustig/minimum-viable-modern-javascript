@@ -32,6 +32,35 @@ if (!dev) {
 /* Avoid repetition */
 var sourcePath = path.resolve(__dirname, 'src')
 
+/* Again to avoid repetition, the CSS loaders uses for SCSS and CSS */
+var cssLoaders = [
+  /*
+   * The `css-loader` is another loader written by the webpack
+   * core team. It has various features:
+   *
+   * * It compiles assets requested using `url()` directly
+   *   into CSS (turned off using `-url`)
+   * * Sourcemaps (Controlled globally using the `devtool`
+   *   property)
+   * * Minification (`minimize`)
+   * *
+   * * [And more](https://github.com/webpack/css-loader)
+   */
+  dev
+    ? 'css?-minimize&-url'
+    : 'css?minimize&-url',
+  /*
+   * Right after the SCSS has been compiled to CSS, its piped
+   * through the `postcss-loader`. PostCSS defines a plugin
+   * system, by which simple JS plugins can manipulate CSS
+   * as AST-like structures.
+   *
+   * The actual PostCSS plugins are set near the end of the
+   * file with the `postcss` property.
+   */
+  'postcss'
+]
+
 /*
  * Webpack will require this module by default and expects it to export a module
  * In the following line we can actually see, that NPM actually doesn't use commonJS
@@ -77,7 +106,6 @@ module.exports = {
       {
         /* The SCSS loader */
         test: /\.scss$/,
-        include: [ sourcePath ],
         /*
          * The loader itself is a bit more complex.
          * Mostly because we are combining serveral differen loaders.
@@ -89,38 +117,20 @@ module.exports = {
          * in reverse order. So here, the `style-loader` will be called
          * last.
          */
-        loader: cssExtractor.extract([
-          /*
-           * The `css-loader` is another loader written by the webpack
-           * core team. It has various features:
-           *
-           * * It compiles assets requested using `url()` directly
-           *   into CSS (turned off using `-url`)
-           * * Sourcemaps (Controlled globally using the `devtool`
-           *   property)
-           * * Minification (`minimize`)
-           * *
-           * * [And more](https://github.com/webpack/css-loader)
-           */
-          dev
-            ? 'css?-minimize&-url'
-            : 'css?minimize&-url',
-          /*
-           * Right after the SCSS has been compiled to CSS, its piped
-           * through the `postcss-loader`. PostCSS defines a plugin
-           * system, by which simple JS plugins can manipulate CSS
-           * as AST-like structures.
-           *
-           * The actual PostCSS plugins are set near the end of the
-           * file with the `postcss` property.
-           */
-          'postcss',
-          /*
-           * The Sass loader uses `node-sass` which in turn uses
-           * libsass
-           */
-          'sass'
-        ])
+        loader: cssExtractor.extract(
+          cssLoaders.concat([
+            /*
+             * The Sass loader uses `node-sass` which in turn uses
+             * libsass
+             */
+            'sass'
+          ])
+        )
+      },
+      /* Pure CSS */
+      {
+        test: /\.css$/,
+        loader: cssExtractor.extract(cssLoaders)
       },
       /* Pug compilation */
       {
