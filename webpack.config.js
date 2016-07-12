@@ -100,7 +100,7 @@ module.exports = {
          * The loader-string. Quiet an odd construct read more here:
          * http://webpack.github.io/docs/using-loaders.html
          */
-        loader: 'babel?presets[]=es2015'
+        loader: 'babel?presets[]=es2015&cacheDirectory'
       },
 
       {
