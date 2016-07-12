@@ -17,10 +17,16 @@ html(lang="en")
       section
         main
           | # Content
-          | * [Problems](#3)
-          | * [Basic Toolchain](#4)
-          | * [Creating an NPM package](#9)
+          | * [Problems](#4)
+          | * [Basic Toolchain](#5)
+          | * [Creating an NPM package](#10)
           | * [Configuring Webpack](#)
+      section
+        main
+          | # It's fine!
+          | [![Broken rally car still able to drive.](http://imgur.com/download/2aUUE4T)](http://i.imgur.com/2aUUE4T.gifv)
+        aside
+          | This is how our current workflow works.
       section
         main
           | # Problems
@@ -30,7 +36,13 @@ html(lang="en")
           | * Minification
       section
         main
-          | # Basic Toolchain
+          | # Many Solutions
+          | [![Lets be that guy](https://imgur.com/download/HkcW4OK)](https://i.imgur.com/HkcW4OK.gifv)
+        aside
+          | This is a pretty accurate depection of the JavaScript world. Lets be like the guy.
+      section
+        main
+          | # New Basic Toolchain
           | * Node.js
           | * [NVM (Windows)](https://github.com/coreybutler/nvm-windows)
           | * [NPM](https://npmjs.com)
@@ -66,6 +78,9 @@ html(lang="en")
           | ```
           | $ npm init
           | ```
+          | 
+          | _/package.json_
+          | 
           | ```
           | {
           |   "name": "my-awesome-package",
@@ -87,6 +102,8 @@ html(lang="en")
       section
         main
           | # NPM – Scripts
+          | _/package.json_
+          | 
           | ```
           | ...
           | "scripts": {
@@ -103,6 +120,8 @@ html(lang="en")
       section
         main
           | # NPM – Further properties
+          | _/package.json_
+          | 
           | ```
           | ...
           | "private": true,
@@ -126,6 +145,8 @@ html(lang="en")
           | 
           | In the example we are using `--save-dev`. It's does the same as `--save` but instead of adding it to `"dependencies"`, it adds it to `"devDependencies"`. These are dependencies that should only be installed in a development environment. Detection for development environments is done by reading the `$NODE_ENV` environment variable. If `$NODE_ENV` isn't set, its interpreted as a development environment. More on that later.
           | 
+          | In pure front-end projects, **that won't be published as packages**, I like to add dependencies that are later bundled as `"dependencies"` instead of adding them as `devDependencies`. That makes the `package.json` a bit more readable.
+          | 
           | There are some other kinds of dependencies. You can read more about these [here](https://docs.npmjs.com/files/package.json#peerdependencies).
           | 
           | Maybe a word of caution here. Using `npm install` can be very dangerous. As said previously `install`-scipts are sometimes used for malicious purposes. These attacks are expecially popular for [typosquatters](http://incolumitas.com/2016/06/08/typosquatting-package-managers/). So be carefull when typing out package names. Alternatively you may use something like the following as a safeguard against it:
@@ -140,5 +161,88 @@ html(lang="en")
           |   fi
           | }
           | ```
+      section
+        main
+          | # Questions?
+          | [![what?!](https://media.giphy.com/media/sRb7yNtTJAtZS/giphy.gif)](http://giphy.com/gifs/doctor-who-what-tenth-sRb7yNtTJAtZS)
+        aside
+          | Any questions about NPM?
+      section
+        main
+          | # Configuring Webpack
+          | _/webpack.config.js_
+          | 
+          | ```
+          | module.exports = {
+          |   entry: { main: './src' },
+          |   output: {
+          |     filename: '[name].js',
+          |     path: __dirname + '/dist'
+          |   }
+          | },
+          | devtool: '#source-map'
+          | ```
+        aside
+          | The best way to pass options to Webpack is to use a configuration file. Here's a the most basic configuration file. All it does is take a `./src/index.js`, resolve it's dependencies and bundle it in `./dist/main.js`.
+          | 
+          | The `entry` property defines _entry-points_, which Webpack should bundle. If we pass a directory, it'll search for a file called `index.js` inside of it.
+          | 
+          | For the most part this configuration is pretty self-explainatory. So I don't want to get in too deep here. If you want to have some more background on the options we're using, check [the `webpack.config.js` of this project](https://github.com/Kriegslustig/minimum-viable-modern-javascript/blob/master/webpack.config.js). It contains tons of detailed explanaitions for the options we're using.
+          | 
+          | `__dirname` is a global variable in Node.js that contains an absolute path to the directory inside of which the current module is stored. This configuration still has one problem though. Cross-Platform compatibility.
+          | 
+          | `devtool` are developer tool options. Here we are enabling source-maps. The `#` is to enforce [pragma style](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-howwork). More [here](https://webpack.github.io/docs/configuration.html#devtool).
+      section
+        main
+          | # Webpack – Cross-Platform Compatibility
+          | _/webpack.config.js_
+          | 
+          | ```
+          | var path = require('path')
+          | ...
+          |   output: {
+          |     filename: '[name].js',
+          |     path: path.resolve(__dirname, 'dist')
+          |   }
+          | ...
+          | ```
+        aside
+          | We can use the `path.resolve` function as a OS-independent way to get an absolute path to something. We don't need to do the same for the entrypoints since `require` handles then, which already has path normalization built-in.
+      section
+        main
+          | # Webpack – Loaders
+          | ```
+          | $ npm i -S \
+          |     babel-core \
+          |     babel-loader \
+          |     babel-preset-es2015
+          | ```
+          | 
+          | _/webpack.config.js_
+          | 
+          | ```
+          | module.exports = {
+          | ...
+          |   module: {
+          |     loaders: [
+          |       {
+          |         test: /\.js$/,
+          |         loader: 'babel?presets[]=es2015&cacheDirectory',
+          |         include: [ path.resolve(__dirname, 'src') ]
+          |       }
+          |     ]
+          |   }
+          | }
+          | ```
+        aside
+          | Webpack loaders define how certain file types should be treated when beeing loaded as modules. Having a richt ecosystem of loaders is what makes Webpack so great.
+          | 
+          | Here we are installing Babel. [Babel](http://babeljs.io/) is a JavaScript compiler. It provides an interface for Plugins like `babel-preset-es2015` to manipulate JS in an easy and fast way. `babel-preset-es2015` makes Babel transpile ES6 to ES5. So it's quiet handy. Babel is completely independent of Webpack. `babel-loader` is the "adapter" to Webpack. We can configure it inside our `webpack.config.js` and it'll pipe our JS through Babel for us.
+          | 
+          | To configure it, we need to add a `module` property to our configuration. It contains options related to module handling. `module.loaders` is an array containing the actual loaders. A loader-object must contain a `test` and a `loader` property. `test` is a RegExp matched against the whole filepath of a module. Here we are matching against the `.js` extension.
+          | 
+          | The `loader` property is a '!' seperated string of loaders. A loader should be the name of an installed loader. The `-loader` extension is optional and added by webpack if it's not explicitly used. So `babel` resolves to `babel-loader`. The querystring contains options that are passed to the loader. The `name[]=value` pattern is used for arrays so you could do `name[]=first&name[]=second`. Here it's specifically used to enable the `babel-preset-es2015` package. We are also enabling the Babel `cacheDirectory` for Babel to properly cache the compiled modules.
+          | 
+          | Lastly, the `include` property. It defines which directories the loader should be used for. It's used, so that we don't have to pipe all NPM modules through our loader.
     script(src="./main.js")
 
