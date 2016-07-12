@@ -1,28 +1,88 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Minimum Viable JavaScript Development</title><link href="./main.css" rel="stylesheet"></head><body><article id="presentation"><section class="markdown title-slide">## _the_
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Minimum Viable JavaScript Development</title><link href="./main.css" rel="stylesheet"></head><body><article id="presentation"><section class="title-slide"><main>## _the_
 # Minimum Viable JS Development
 ## _(-environment for the front end)_
-![Comic: The UX Designer Paradox from http://uxmag.com/content/comic-the-ux-designer-paradox](http://uxmag.com/sites/default/files/bonus-launch-toon.png)<aside># YOLO</aside></section><section class="markdown"># Content
+![Comic: The UX Designer Paradox from http://uxmag.com/content/comic-the-ux-designer-paradox](http://uxmag.com/sites/default/files/bonus-launch-toon.png)</main><aside> </aside></section><section><main># Content
 * [Problems](#3)
 * [Basic Toolchain](#4)
 * [Creating an NPM package](#9)
-* [Configuring Webpack](#)</section><section class="markdown"># Problems
+* [Configuring Webpack](#)</main></section><section><main># Problems
 * Dependency injection
 * Versioning
 * ECMAScript 6.0
-* Minification</section><section class="markdown"># Basic Toolchain
+* Minification</main></section><section><main># Basic Toolchain
 * Node.js
 * [NVM (Windows)](https://github.com/coreybutler/nvm-windows)
 * [NPM](https://npmjs.com)
-* [Webpack](http://webpack.github.io/)</section><section class="markdown"># Tools – Node.js
+* [Webpack](http://webpack.github.io/)</main></section><section><main># Tools – Node.js
 * Asynchronous I/O with [libuv](https://github.com/libuv/libuv)
-* 4.4 Long-Term-Support</section><section class="markdown"># Tools – NVM-Windows
+* 4.4 Long-Term-Support</main></section><section><main><main># Tools – NVM-Windows
 * [Node Version Manager Windows](https://www.npmjs.com/package/nvm)
 * [n](https://www.npmjs.com/package/n) (for *nix)
-* Incompatibilities in Adapters</section><section class="markdown"># Tools – NPM
+* Incompatibilities in Adapters</main></main></section><section><main># Tools – NPM
 * [Node Package Manager](https://www.npmjs.com)
 * [Dependency Management](https://docs.npmjs.com/how-npm-works/npm2)
-* [Bower](https://bower.io/)</section><section class="markdown"># Tools – Webpack
+* [Bower](https://bower.io/)</main></section><section><main># Tools – Webpack
 * Build Tool – Module Bundler
 * [Powerful Configuration](https://webpack.github.io/docs/configuration.html)
 * [Rich Ecosystem](https://webpack.github.io/docs/list-of-loaders.html)
-* [[...]](https://webpack.github.io/docs/what-is-webpack.html#how-is-webpack-different)</section></article><script src="./main.js"></script></body></html>
+* [[...]](https://webpack.github.io/docs/what-is-webpack.html#how-is-webpack-different)</main></section><section><main># Creating an NPM package
+```
+$ npm init
+```
+```
+{
+  "name": "my-awesome-package",
+  "version": "0.1.0",
+  "description": "My awesome package which does nothing",
+  "main": "index.js",
+...
+  "author": "superman &lt;superman@metropolis.gov&gt;",
+  "license": "UNLICENSED",
+...
+}
+```</main><aside>First You'll need to create a package.json file. Its most important features are keeping holding the version of your package, keeping track of dependencies and their version(-constraints) and build automation.
+ 
+`npm init` helps you with that.
+ 
+Here we can see what `npm` creates for us, when we run that command. For the most part this is pretty self explanetory. Except for the `"license"` property maybe. It has to be a valid SPDX-License expression. By declaring `"UNLICESED"`, we retain all rights (for now).</aside></section><section><main># NPM – Scripts
+```
+...
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
+...
+```</main><aside>NPM-scripts are a very popular way to wrap build scripts. Every developer on NPM knows where to find them. So you mostly don't need to even document you're npm-scripts, since every developer will know to look into the `package.json` before doing anything else.
+ 
+Basically NPM-scripts are just shell scripts. The only thing special about them, is how they are run. When running them NPM puts the `./node_modules` directory into your `$PATH`. We'll see what this helps us with later.
+ 
+NPM-scripts can be run using the `npm run[-script] [script-name]` command. To run this test-script (that does nothing except raising an exception) we can run `npm run test`. There are some special scriptnames that are aliased by NPM. `test` is one of them. So you may also run `npm test` to run it. There are some more special NPM scripts. Most importantly `[post|pre]install`. These scripts are automatically run before and after a package is installed. These are sometimes used in malicious packets to inject malware. Read more about NPM-scripts [here](https://docs.npmjs.com/misc/scripts#description).</aside></section><section><main># NPM – Further properties
+```
+...
+"private": true,
+"engines": {
+  "node": ">=4.0"
+},
+...
+```</main><aside>Here are some other properties you might want to add. The `"private"` property prevents the packaged from accidently being published on npmjs.com. The `"engines"` property simply defines compatible versions of node. Read more about the `package.json` [here](https://docs.npmjs.com/files/package.json).</aside></section><section><main># NPM – Dependencies
+```
+$ npm install --save-dev webpack
+```</main><aside>Dependencies are also store inside the `package.json` file. You may manage them manually inside the `package.json`. Though in most cases it's best to use the CLI. By default NPM just puts dependencies inside a `node_modules` directory and doesn't manipulate the `package.json`. So when running `npm install webpack`, NPM will download the dependency and put it in `node_modules`, but the `package.json` file won't have changed. Say you are using SVC system (like Git) and are ignoring `node_modules` to avoid commiting someone elses modules. When someone else clones your project and installs your it by running `npm install`, Webpack won't be installed.
+ 
+For a dependency to be installed, it needs to be set as a dependency inside the `package.json` file. For that to be done by NPM we need to use the `--save` switch. So when running `npm install --save webpack`, `"webpack": "^1.13.1"` will be added to `package.json`. The `^` means, that any version of the package that is "compatible" (by [semver](http://semver.org/)) with the version following `^`. Path and minor upgrades are considered compatible.
+ 
+In the example we are using `--save-dev`. It's does the same as `--save` but instead of adding it to `"dependencies"`, it adds it to `"devDependencies"`. These are dependencies that should only be installed in a development environment. Detection for development environments is done by reading the `$NODE_ENV` environment variable. If `$NODE_ENV` isn't set, its interpreted as a development environment. More on that later.
+ 
+There are some other kinds of dependencies. You can read more about these [here](https://docs.npmjs.com/files/package.json#peerdependencies).
+ 
+Maybe a word of caution here. Using `npm install` can be very dangerous. As said previously `install`-scipts are sometimes used for malicious purposes. These attacks are expecially popular for [typosquatters](http://incolumitas.com/2016/06/08/typosquatting-package-managers/). So be carefull when typing out package names. Alternatively you may use something like the following as a safeguard against it:
+```
+npmi () {
+  local A
+  npm info ${1} | less
+  echo "?"
+  read A
+  if [ -n $A ]; then
+    npm i ${@}
+  fi
+}
+```</aside></section></article><script src="./main.js"></script></body></html>

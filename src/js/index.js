@@ -34,8 +34,8 @@ bespoke.from(
     bespokeTouch(),
     bespokeHash(),
     bespokeProgress(),
-    bespokeNotes(),
-    bespokeThemeCube()
+    bespokeThemeCube(),
+    bespokeNotes()
   ]
 )
 

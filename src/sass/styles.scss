@@ -1,3 +1,6 @@
+/*
+ * Generic styles for HTML elements
+ */
 html,
 body {
   font-family: InputMono, Courier New, Curier, monospace;
@@ -12,27 +15,8 @@ h2 {
   text-align: left;
 }
 
-.title-slide h1 {
-  font-size: 3.5rem;
-  line-height: 4rem;
-}
-
-.title-slide h1,
-.title-slide h2 {
-  align-self: center;
-  text-align: center;
-}
-
-.title-slide p {
-  align-self: center;
-}
-
-section.bespoke-slide {
-  height: 100vh;
-  width: 100vw;
-  margin-left: -50vw;
-  margin-top: -50vh;
-  align-items: flex-start;
+pre {
+  line-height: 2em;
 }
 
 section li {
@@ -68,5 +52,69 @@ img {
   margin: 1rem 0;
   max-width: 70vw;
   max-height: 80vh;
+}
+
+p {
+  margin: 2rem 0;
+}
+
+pre {
+  padding: 0 !important;
+  margin: 0 0 1rem 0;
+}
+
+main {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/*
+ * Styles for the title slide
+ */
+.title-slide h1 {
+  font-size: 3.5rem;
+  line-height: 4rem;
+}
+
+.title-slide h1,
+.title-slide h2 {
+  align-self: center;
+  text-align: center;
+}
+
+.title-slide p {
+  align-self: center;
+}
+
+/*
+ * General styles for the presentation
+ */
+.bespoke-slide p {
+  line-height: 1.5em;
+}
+
+section.bespoke-slide {
+  text-align: left;
+  height: 100vh;
+  width: 100vw;
+  margin-left: -50vw;
+  margin-top: -50vh;
+}
+
+/*
+ * Notes
+ */
+.bespoke-slide > aside {
+  text-align: left;
+}
+
+.bespoke-slide > aside {
+  font-family: Helvetica, sans-serif;
+  padding-right: 20px;
+  top: -50%;
+  overflow-y: auto;
+  max-height: 200vh;
 }
 
