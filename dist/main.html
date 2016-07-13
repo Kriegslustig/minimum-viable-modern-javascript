@@ -4,8 +4,9 @@
 ![Comic: The UX Designer Paradox from http://uxmag.com/content/comic-the-ux-designer-paradox](http://uxmag.com/sites/default/files/bonus-launch-toon.png)</main><aside> </aside></section><section><main># Content
 * [Problems](#4)
 * [Basic Toolchain](#5)
-* [Creating an NPM package](#10)
-* [Configuring Webpack](#)</main></section><section><main># It's fine!
+* [Creating an NPM package](#11)
+* [Configuring Webpack](#16)
+* [Further Reading](#24)</main></section><section><main># It's fine!
 [![Broken rally car still able to drive.](http://imgur.com/download/2aUUE4T)](http://i.imgur.com/2aUUE4T.gifv)</main><aside>This is how our current workflow works.</aside></section><section><main># Problems
 * Dependency injection
 * Versioning
@@ -27,7 +28,7 @@
 * Build Tool – Module Bundler
 * [Powerful Configuration](https://webpack.github.io/docs/configuration.html)
 * [Rich Ecosystem](https://webpack.github.io/docs/list-of-loaders.html)
-* [[...]](https://webpack.github.io/docs/what-is-webpack.html#how-is-webpack-different)</main></section><section><main># Creating an NPM package
+* [[…]](https://webpack.github.io/docs/what-is-webpack.html#how-is-webpack-different)</main></section><section><main># Creating an NPM package
 ```
 $ npm init
 ```
@@ -40,10 +41,10 @@ _/package.json_
   "version": "0.1.0",
   "description": "My awesome package which does nothing",
   "main": "index.js",
-...
+…
   "author": "superman &lt;superman@metropolis.gov&gt;",
   "license": "UNLICENSED",
-...
+…
 }
 ```</main><aside>First You'll need to create a package.json file. Its most important features are keeping holding the version of your package, keeping track of dependencies and their version(-constraints) and build automation.
  
@@ -53,11 +54,11 @@ Here we can see what `npm` creates for us, when we run that command. For the mos
 _/package.json_
  
 ```
-...
+…
 "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1"
 },
-...
+…
 ```</main><aside>NPM-scripts are a very popular way to wrap build scripts. Every developer on NPM knows where to find them. So you mostly don't need to even document you're npm-scripts, since every developer will know to look into the `package.json` before doing anything else.
  
 Basically NPM-scripts are just shell scripts. The only thing special about them, is how they are run. When running them NPM puts the `./node_modules` directory into your `$PATH`. We'll see what this helps us with later.
@@ -66,15 +67,22 @@ NPM-scripts can be run using the `npm run[-script] [script-name]` command. To ru
 _/package.json_
  
 ```
-...
+…
 "private": true,
 "engines": {
   "node": ">=4.0"
 },
-...
+…
 ```</main><aside>Here are some other properties you might want to add. The `"private"` property prevents the packaged from accidently being published on npmjs.com. The `"engines"` property simply defines compatible versions of node. Read more about the `package.json` [here](https://docs.npmjs.com/files/package.json).</aside></section><section><main># NPM – Dependencies
 ```
 $ npm install --save-dev webpack
+```
+ 
+_/package.json_
+```
+"devDependencies": {
+  "webpack": "^1.13.1"
+…
 ```</main><aside>Dependencies are also store inside the `package.json` file. You may manage them manually inside the `package.json`. Though in most cases it's best to use the CLI. By default NPM just puts dependencies inside a `node_modules` directory and doesn't manipulate the `package.json`. So when running `npm install webpack`, NPM will download the dependency and put it in `node_modules`, but the `package.json` file won't have changed. Say you are using SVC system (like Git) and are ignoring `node_modules` to avoid commiting someone elses modules. When someone else clones your project and installs your it by running `npm install`, Webpack won't be installed.
  
 For a dependency to be installed, it needs to be set as a dependency inside the `package.json` file. For that to be done by NPM we need to use the `--save` switch. So when running `npm install --save webpack`, `"webpack": "^1.13.1"` will be added to `package.json`. The `^` means, that any version of the package that is "compatible" (by [semver](http://semver.org/)) with the version following `^`. Path and minor upgrades are considered compatible.
@@ -117,46 +125,93 @@ For the most part this configuration is pretty self-explainatory. So I don't wan
  
 `__dirname` is a global variable in Node.js that contains an absolute path to the directory inside of which the current module is stored. This configuration still has one problem though. Cross-Platform compatibility.
  
-`devtool` are developer tool options. Here we are enabling source-maps. The `#` is to enforce [pragma style](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-howwork). More [here](https://webpack.github.io/docs/configuration.html#devtool).</aside></section><section><main># Webpack – Cross-Platform Compatibility
+`devtool` are developer tool options. Here we are enabling source-maps. The `#` is to enforce [pragma style](http://www.html5rocks.com/en/tutorials/developertools/sourcemaps/#toc-howwork). More [here](https://webpack.github.io/docs/configuration.html#devtool).</aside></section><section><main># Webpack – Compatibility
 _/webpack.config.js_
  
 ```
 var path = require('path')
-...
+…
+module.exports = {
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist')
   }
-...
+…
 ```</main><aside>We can use the `path.resolve` function as a OS-independent way to get an absolute path to something. We don't need to do the same for the entrypoints since `require` handles then, which already has path normalization built-in.</aside></section><section><main># Webpack – Loaders
 ```
 $ npm i -S \
     babel-core \
     babel-loader \
     babel-preset-es2015
-```
+```</main><aside>Webpack loaders define how certain file types should be treated when beeing loaded as modules. Having a richt ecosystem of loaders is what makes Webpack so great.
  
+Here we are installing Babel. [Babel](http://babeljs.io/) is a JavaScript compiler. It provides an interface for Plugins like `babel-preset-es2015` to manipulate JS in an easy and fast way. `babel-preset-es2015` makes Babel transpile ES6 to ES5. So it's quiet handy. Babel is completely independent of Webpack. `babel-loader` is the "adapter" to Webpack. We can configure it inside our `webpack.config.js` and it'll pipe our JS through Babel for us.</aside></section><section><main># Webpack – Loaders
 _/webpack.config.js_
  
 ```
 module.exports = {
-...
+…
+module.exports = {
   module: {
     loaders: [
       {
         test: /\.js$/,
         loader: 'babel?presets[]=es2015&cacheDirectory',
         include: [ path.resolve(__dirname, 'src') ]
-      }
-    ]
-  }
-}
-```</main><aside>Webpack loaders define how certain file types should be treated when beeing loaded as modules. Having a richt ecosystem of loaders is what makes Webpack so great.
- 
-Here we are installing Babel. [Babel](http://babeljs.io/) is a JavaScript compiler. It provides an interface for Plugins like `babel-preset-es2015` to manipulate JS in an easy and fast way. `babel-preset-es2015` makes Babel transpile ES6 to ES5. So it's quiet handy. Babel is completely independent of Webpack. `babel-loader` is the "adapter" to Webpack. We can configure it inside our `webpack.config.js` and it'll pipe our JS through Babel for us.
- 
-To configure it, we need to add a `module` property to our configuration. It contains options related to module handling. `module.loaders` is an array containing the actual loaders. A loader-object must contain a `test` and a `loader` property. `test` is a RegExp matched against the whole filepath of a module. Here we are matching against the `.js` extension.
+…
+```</main><aside>To configure it, we need to add a `module` property to our configuration. It contains options related to module handling. `module.loaders` is an array containing the actual loaders. A loader-object must contain a `test` and a `loader` property. `test` is a RegExp matched against the whole filepath of a module. Here we are matching against the `.js` extension.
  
 The `loader` property is a '!' seperated string of loaders. A loader should be the name of an installed loader. The `-loader` extension is optional and added by webpack if it's not explicitly used. So `babel` resolves to `babel-loader`. The querystring contains options that are passed to the loader. The `name[]=value` pattern is used for arrays so you could do `name[]=first&name[]=second`. Here it's specifically used to enable the `babel-preset-es2015` package. We are also enabling the Babel `cacheDirectory` for Babel to properly cache the compiled modules.
  
-Lastly, the `include` property. It defines which directories the loader should be used for. It's used, so that we don't have to pipe all NPM modules through our loader.</aside></section></article><script src="./main.js"></script></body></html>
+Lastly, the `include` property. It defines which directories the loader should be used for. It's used, so that we don't have to pipe all NPM modules through our loader.</aside></section><section><main># Webpack – Plugins
+_/webpack.config.js_
+ 
+```
+…
+module.exports = {
+  plugins: [
+    new webpack.optimize.DedupePlugin()
+  ],
+…
+```</main><aside>Plugins change the internal behaviour of Webpack. Some plugins are shipped as part of the Webpack core package. One of them is `webpack.optimize.DedupePlugin`. Its one of those features that really set Webpack apart from similar tools. Deduping (deduplicating) is a powerful compression technique that eliminates duplicates in filesets. This plugin does that for JavaScript code.
+ 
+Running dedupe with every build is discuraged. Instead it should only be run when going to production. So let's see how we might go about doing that.</aside></section><section><main># Webpack – Dev/Prod
+_/webpack.config.js_
+ 
+```
+…
+var dev = process.env.NODE_ENV !== 'production'
+var plugins = []
+if (!dev) {
+  plugins.push(new webpack.optimize.DedupePlugin())
+}
+…
+module.exports = {
+  plugins: plugins,
+  dev
+    ? '#source-map'
+    : '',
+…
+```</main><aside>This is quiet straigt forward. As we have discovered before, NPM uses the `NODE_ENV` variable to decide wether or not to install `devDependencies`. We can use that same variable to decide wether or not to run dedupe and compile source-maps.
+ 
+To read environment variables, we can use the `process.env` object. It contains all environment variables. So here dev is true if the `NODE_ENV` is not equal to production.
+ 
+To compile the production code we'd now have to run `NODE_ENV=production webpack`. Straight forward enough. Dough we could integrate it into our NPM-scripts.</aside></section><section><main># Webpack – NPM-Scripts
+_/package.json_
+ 
+```
+…
+"scripts": {
+  "build": "NODE_ENV=production webpack -p",
+  "ms-build": "set NODE_ENV=production && webpack -p && set NODE_ENV=development",
+  "watch-build": "webpack --watch",
+…
+```</main><aside>First we add the script described on the last slide as `"build"`. Additionally we set the `-p` flag to trigger some [additional optimization](https://webpack.github.io/docs/cli.html#production-shortcut-p).
+ 
+To achive the same on DOS systems, we can use powershell. Its syntax is a little different. That's what `"ms-build"` is for.
+ 
+Finally `"watch-build"` runs the build in debugging mode and reruns it whenever something changes</aside></section><section><main># Any Questions?</main></section><section><main># Further reading
+* [Keep your dependencies up to date!](http://greenkeeper.io/)
+* [webpack.config.js example](https://github.com/Kriegslustig/minimum-viable-modern-javascript/blob/master/webpack.config.js)
+* [The notes on these slides]()</main></section><section><main># Let's Rock!
+[![Doctor Who thumbs up](https://media.giphy.com/media/MSS0COPq80x68/giphy.gif)](http://mattsmithissexy.tumblr.com/post/52082631953/timeywimeylord-doctor-who-meme-one-doctor)</main></section></article><script src="./main.js"></script></body></html>

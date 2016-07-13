@@ -37,7 +37,8 @@ Creating an NPM package
 		 Typosqatting!!
 
 Configuring Webpack
-	Development and Production Mode
-	Deduplication
+	Basic configuration
 	Adding loaders
+	Plugins/Deduplication
+	Development/Production Mode
 
