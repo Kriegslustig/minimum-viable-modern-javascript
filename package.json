@@ -7,7 +7,8 @@
     "build": "NODE_ENV=production webpack -p",
     "ms-build": "set NODE_ENV=production && webpack -p && set NODE_ENV=development",
     "watch-build": "webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server ./src --hot --inline"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,8 @@
     "bespoke-notes": "^2.0.0",
     "bespoke-progress": "^1.0.0",
     "bespoke-theme-cube": "^2.0.1",
-    "bespoke-touch": "^1.0.0"
+    "bespoke-touch": "^1.0.0",
+    "showdown": "^1.4.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.7",
@@ -39,8 +41,7 @@
     "postcss-loader": "^0.9.1",
     "pug-html-loader": "^1.0.8",
     "sass-loader": "^4.0.0",
-    "showdown": "^1.4.2",
-    "style-loader": "^0.13.1",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
   }
 }
