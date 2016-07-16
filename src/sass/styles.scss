@@ -112,14 +112,12 @@ section.bespoke-slide {
  * Notes
  */
 .bespoke-slide > aside {
-  text-align: left;
-}
-
-.bespoke-slide > aside {
   font-family: Times, serif;
   padding-right: 20px;
   top: -50%;
   overflow-y: auto;
   max-height: 200vh;
+  text-align: left;
+  opacity: 0;
 }
 
