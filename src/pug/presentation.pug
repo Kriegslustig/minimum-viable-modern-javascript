@@ -230,6 +230,8 @@ html(lang="en")
           | Webpack loaders define how certain file types should be treated when beeing loaded as modules. Having a richt ecosystem of loaders is what makes Webpack so great.
           | 
           | Here we are installing Babel. [Babel](http://babeljs.io/) is a JavaScript compiler. It provides an interface for Plugins like `babel-preset-es2015` to manipulate JS in an easy and fast way. `babel-preset-es2015` makes Babel transpile ES6 to ES5. So it's quiet handy. Babel is completely independent of Webpack. `babel-loader` is the "adapter" to Webpack. We can configure it inside our `webpack.config.js` and it'll pipe our JS through Babel for us.
+          | 
+          | What we have installed here doesn't include the [Babel polyfills](https://babeljs.io/docs/usage/polyfill/) you will probably want these for all ES6 features that aren't just syntax related.
       section
         main
           | # Webpack – Loaders
