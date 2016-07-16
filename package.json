@@ -8,7 +8,7 @@
     "ms-build": "set NODE_ENV=production && webpack -p && set NODE_ENV=development",
     "watch-build": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server ./src --hot --inline"
+    "start": "webpack-dev-server ./src --hot --inline --content-base dist/"
   },
   "repository": {
     "type": "git",

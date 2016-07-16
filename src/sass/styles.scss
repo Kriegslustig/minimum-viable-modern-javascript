@@ -108,6 +108,14 @@ section.bespoke-slide {
   margin-top: -50vh;
 }
 
+.bespoke-before {
+  transform: translateX(18.75vw)translateX(-60vw)rotateY(-90deg)translateX(-60vw);
+}
+
+.bespoke-after {
+  transform: translateX(-18.75vw)translateX(60vw)rotateY(90deg)translateX(60vw);
+}
+
 /*
  * Notes
  */
