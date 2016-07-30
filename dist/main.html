@@ -114,9 +114,9 @@ module.exports = {
   output: {
     filename: '[name].js',
     path: __dirname + '/dist'
-  }
-},
-devtool: '#source-map'
+  },
+  devtool: '#source-map'
+}
 ```</main><aside>The best way to pass options to Webpack is to use a configuration file. Here's a the most basic configuration file. All it does is take a `./src/index.js`, resolve it's dependencies and bundle it in `./dist/main.js`.
  
 The `entry` property defines _entry-points_, which Webpack should bundle. If we pass a directory, it'll search for a file called `index.js` inside of it.
@@ -153,7 +153,6 @@ _/webpack.config.js_
 ```
 module.exports = {
 …
-module.exports = {
   module: {
     loaders: [
       {
@@ -190,7 +189,7 @@ if (!dev) {
 …
 module.exports = {
   plugins: plugins,
-  dev
+  devtool: dev
     ? '#source-map'
     : '',
 …
